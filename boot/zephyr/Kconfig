@@ -166,7 +166,7 @@ config MBEDTLS_CFG_FILE
 
 config BOOT_HW_KEY
 	bool "Use HW key for image verification"
-	default n
+	default y
 	help
 	  Use HW key for image verification, otherwise the public key is embedded
 	  in MCUBoot. If enabled the public key is appended to the signed image
@@ -339,8 +339,10 @@ endif # !SINGLE_APPLICATION_SLOT
 
 config BOOT_ENCRYPTION_KEY_FILE
 	string "encryption key file"
-    depends on BOOT_ENCRYPT_EC256 || BOOT_SERIAL_ENCRYPT_EC256
+    	depends on BOOT_ENCRYPT_RSA || BOOT_ENCRYPT_EC256 || BOOT_SERIAL_ENCRYPT_EC256
+	default "enc-rsa2048-priv.pem" if BOOT_ENCRYPT_RSA
 	default "enc-ec256-priv.pem" if BOOT_SIGNATURE_TYPE_ECDSA_P256
+	default "enc-x25519-priv.pem" if BOOT_ENCRYPT_X25519
 	default ""
 	help
 	  You can use either absolute or relative path.
